@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yash — Artist, Photographer, Filmmaker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  /* ─── TOKENS ─────────────────────────────────────────── */
+  :root {
+    --black:    #000000;
+    --white:    #F5F5F0;
+    --grey-1:   #111111;
+    --grey-2:   #1a1a1a;
+    --grey-3:   #444444;
+    --grey-4:   #888888;
+    --silver:   #C8C8C8;
+    --border:   rgba(200,200,200,0.15);
+    --display:  'Cormorant Garamond', Georgia, serif;
+    --body:     'Inter', -apple-system, sans-serif;
+    --ease:     cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  /* ─── RESET ──────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--body);
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  img { display: block; width: 100%; object-fit: cover; }
+  a { color: inherit; text-decoration: none; }
+  button { background: none; border: none; cursor: pointer; font: inherit; color: inherit; }
+
+  /* ─── CUSTOM SCROLLBAR ───────────────────────────────── */
+  ::-webkit-scrollbar { width: 2px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--grey-3); }
+
+  /* ─── NAV ────────────────────────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 28px 48px;
+    transition: background 0.5s var(--ease), padding 0.4s var(--ease);
+  }
+  nav.scrolled {
+    background: rgba(0,0,0,0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 18px 48px;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: var(--display);
+    font-size: 1.35rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .nav-links {
+    display: flex; gap: 40px; list-style: none;
+  }
+  .nav-links a {
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--silver);
+    transition: color 0.3s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: -3px; left: 0; width: 0; height: 1px;
+    background: var(--white);
+    transition: width 0.35s var(--ease);
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-toggle { display: none; flex-direction: column; gap: 5px; padding: 4px; }
+  .nav-toggle span { display: block; width: 24px; height: 1px; background: var(--white); transition: all 0.3s; }
+
+  /* ─── HERO ───────────────────────────────────────────── */
+  #home {
+    position: relative;
+    height: 100vh; min-height: 640px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.95) 100%),
+      url('https://images.unsplash.com/photo-1500673922987-e212871fec22?w=1800&q=80') center/cover no-repeat;
+    transform: scale(1.04);
+    animation: heroKen 18s ease-in-out infinite alternate;
+  }
+  @keyframes heroKen {
+    from { transform: scale(1.04); }
+    to   { transform: scale(1.0); }
+  }
+
+  /* Film-frame left edge — the signature element */
+  .film-edge {
+    position: absolute; left: 0; top: 0; bottom: 0; width: 36px;
+    display: flex; flex-direction: column; justify-content: space-evenly;
+    align-items: center; z-index: 2;
+    border-right: 1px solid rgba(255,255,255,0.08);
+    background: rgba(0,0,0,0.4);
+  }
+  .film-edge span {
+    display: block; width: 14px; height: 10px;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 1px;
+  }
+  .film-label {
+    position: absolute; left: 0; top: 50%; transform: translateY(-50%) rotate(-90deg) translateX(50%);
+    transform-origin: left center;
+    font-size: 0.55rem; letter-spacing: 0.28em;
+    color: rgba(255,255,255,0.22);
+    text-transform: uppercase; white-space: nowrap;
+    z-index: 3;
+  }
+
+  .hero-content {
+    position: relative; z-index: 2;
+    text-align: center; padding: 0 24px;
+  }
+  .hero-eyebrow {
+    font-size: 0.65rem; letter-spacing: 0.35em;
+    text-transform: uppercase; color: var(--silver);
+    margin-bottom: 24px;
+    opacity: 0; animation: fadeUp 1s var(--ease) 0.4s forwards;
+  }
+  .hero-name {
+    font-family: var(--display);
+    font-size: clamp(4.5rem, 12vw, 10rem);
+    font-weight: 300; line-height: 0.92;
+    letter-spacing: -0.01em;
+    opacity: 0; animation: fadeUp 1s var(--ease) 0.7s forwards;
+  }
+  .hero-name em {
+    font-style: italic; font-weight: 300;
+    display: block; color: var(--silver);
+  }
+  .hero-tagline {
+    margin-top: 32px;
+    font-size: 0.72rem; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--grey-4);
+    opacity: 0; animation: fadeUp 1s var(--ease) 1s forwards;
+  }
+  .hero-scroll-hint {
+    position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--grey-4);
+    z-index: 2;
+    opacity: 0; animation: fadeUp 1s var(--ease) 1.4s forwards;
+  }
+  .scroll-line {
+    width: 1px; height: 48px; background: var(--grey-4);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%, 100% { transform: scaleY(1); opacity: 0.4; }
+    50% { transform: scaleY(0.5); opacity: 1; }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── SECTIONS SHARED ────────────────────────────────── */
+  section { padding: 120px 48px; max-width: 1280px; margin: 0 auto; }
+  .section-eyebrow {
+    font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--grey-4); margin-bottom: 20px;
+  }
+  .section-title {
+    font-family: var(--display);
+    font-size: clamp(2.6rem, 5vw, 4.2rem);
+    font-weight: 300; line-height: 1.05;
+  }
+  .section-title em { font-style: italic; color: var(--silver); }
+  .divider {
+    width: 100%; height: 1px; background: var(--border); margin: 0;
+  }
+  .reveal {
+    opacity: 0; transform: translateY(32px);
+    transition: opacity 0.85s var(--ease), transform 0.85s var(--ease);
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ─── ABOUT ──────────────────────────────────────────── */
+  #about-section {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+    align-items: start;
+  }
+  .about-image-wrap {
+    position: relative; aspect-ratio: 3/4; overflow: hidden;
+  }
+  .about-image-wrap img {
+    height: 100%; object-fit: cover;
+    filter: grayscale(100%) contrast(1.05);
+    transition: transform 0.8s var(--ease);
+  }
+  .about-image-wrap:hover img { transform: scale(1.04); }
+  .about-image-label {
+    position: absolute; bottom: 20px; left: 20px;
+    font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5); background: rgba(0,0,0,0.5);
+    padding: 6px 10px;
+  }
+  .about-text { padding-top: 12px; }
+  .about-text .section-title { margin-bottom: 32px; }
+  .about-body {
+    font-size: 1.05rem; line-height: 1.85; color: var(--silver);
+    margin-bottom: 28px;
+  }
+  .about-body strong { color: var(--white); font-weight: 400; }
+  .about-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 0; border: 1px solid var(--border); margin-top: 48px;
+  }
+  .stat {
+    padding: 28px 20px; border-right: 1px solid var(--border);
+    text-align: center;
+  }
+  .stat:last-child { border-right: none; }
+  .stat-num {
+    font-family: var(--display); font-size: 2.4rem;
+    font-weight: 300; display: block; margin-bottom: 4px;
+  }
+  .stat-label {
+    font-size: 0.6rem; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--grey-4);
+  }
+  .disciplines {
+    display: flex; flex-wrap: wrap; gap: 10px; margin-top: 36px;
+  }
+  .discipline-tag {
+    font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase;
+    border: 1px solid var(--border); padding: 8px 16px;
+    color: var(--silver);
+    transition: border-color 0.3s, color 0.3s;
+  }
+  .discipline-tag:hover { border-color: var(--silver); color: var(--white); }
+
+  /* ─── GALLERY SHARED ─────────────────────────────────── */
+  .gallery-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 60px;
+  }
+  .gallery-link {
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--grey-4); border: none; border-bottom: 1px solid var(--border);
+    padding-bottom: 4px; transition: color 0.3s, border-color 0.3s;
+    background: none; cursor: pointer; font-family: var(--body); font-weight: 300;
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .gallery-link:hover { color: var(--white); border-color: var(--silver); }
+  .gallery-link:focus-visible { outline: 1px solid var(--silver); outline-offset: 4px; }
+
+  /* ─── PHOTOGRAPHY ────────────────────────────────────── */
+  .masonry {
+    columns: 3; column-gap: 16px;
+  }
+  .masonry-item {
+    break-inside: avoid; margin-bottom: 16px; overflow: hidden;
+    position: relative; cursor: pointer;
+  }
+  .masonry-item img {
+    display: block; width: 100%;
+    filter: grayscale(100%) contrast(1.05);
+    transition: transform 0.7s var(--ease), filter 0.5s;
+  }
+  .masonry-item:hover img { transform: scale(1.04); filter: grayscale(80%); }
+  .masonry-item .item-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 55%);
+    opacity: 0; transition: opacity 0.4s;
+    display: flex; align-items: flex-end; padding: 18px;
+  }
+  .masonry-item:hover .item-overlay { opacity: 1; }
+  .item-meta { font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--silver); }
+
+  /* ─── PAINTINGS ──────────────────────────────────────── */
+  .paintings-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px;
+  }
+  .painting-cell {
+    position: relative; aspect-ratio: 4/3; overflow: hidden; cursor: pointer;
+  }
+  .painting-cell.tall { aspect-ratio: 3/4; grid-row: span 2; }
+  .painting-cell img {
+    width: 100%; height: 100%; object-fit: cover;
+    filter: grayscale(100%);
+    transition: transform 0.8s var(--ease), filter 0.5s;
+  }
+  .painting-cell:hover img { transform: scale(1.06); filter: grayscale(40%); }
+  .painting-info {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 24px 20px 20px;
+    background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+    transform: translateY(10px); opacity: 0;
+    transition: all 0.4s var(--ease);
+  }
+  .painting-cell:hover .painting-info { transform: none; opacity: 1; }
+  .painting-title { font-family: var(--display); font-size: 1.2rem; font-weight: 300; }
+  .painting-year { font-size: 0.6rem; letter-spacing: 0.16em; color: var(--grey-4); margin-top: 4px; }
+
+  /* ─── FILMS ──────────────────────────────────────────── */
+  .films-list { display: flex; flex-direction: column; }
+  .film-item {
+    display: grid; grid-template-columns: 60px 1fr 1fr auto;
+    align-items: center; gap: 32px;
+    padding: 32px 0; border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.3s;
+    position: relative;
+  }
+  .film-item::before {
+    content: ''; position: absolute; left: -48px; right: -48px; top: 0; bottom: 0;
+    background: var(--grey-1); opacity: 0; transition: opacity 0.3s; z-index: -1;
+  }
+  .film-item:hover::before { opacity: 1; }
+  .film-num {
+    font-family: var(--display); font-size: 1.1rem; color: var(--grey-3); font-weight: 300;
+  }
+  .film-thumb {
+    width: 100%; aspect-ratio: 16/9; overflow: hidden;
+  }
+  .film-thumb img {
+    width: 100%; height: 100%; object-fit: cover;
+    filter: grayscale(100%);
+    transition: filter 0.4s;
+  }
+  .film-item:hover .film-thumb img { filter: grayscale(30%); }
+  .film-info { }
+  .film-title {
+    font-family: var(--display); font-size: 1.5rem; font-weight: 300; margin-bottom: 6px;
+  }
+  .film-detail {
+    font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey-4);
+  }
+  .film-duration {
+    font-size: 0.7rem; letter-spacing: 0.1em; color: var(--grey-4); text-align: right;
+  }
+  .film-play {
+    width: 44px; height: 44px; border: 1px solid var(--border);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.3s, background 0.3s;
+    flex-shrink: 0;
+  }
+  .film-item:hover .film-play {
+    border-color: var(--silver); background: rgba(200,200,200,0.1);
+  }
+  .film-play svg { fill: var(--white); margin-left: 3px; }
+
+  /* ─── VISUAL NARRATIVES ──────────────────────────────── */
+  .narrative-list { display: flex; flex-direction: column; gap: 0; }
+  .narrative-item {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
+    align-items: center;
+    padding: 72px 0; border-bottom: 1px solid var(--border);
+  }
+  .narrative-item:first-child { padding-top: 0; }
+  .narrative-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .narrative-item.flip { direction: rtl; }
+  .narrative-item.flip > * { direction: ltr; }
+  .narrative-frames {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  }
+  .narrative-frames img {
+    aspect-ratio: 3/4; object-fit: cover;
+    filter: grayscale(100%) contrast(1.05);
+    transition: filter 0.5s, transform 0.7s var(--ease);
+    cursor: pointer;
+  }
+  .narrative-frames img:hover { filter: grayscale(60%); transform: scale(1.02); }
+  .narrative-frames img:first-child { grid-row: span 2; aspect-ratio: 3/5; }
+  .narrative-count {
+    font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--grey-4); margin-bottom: 18px;
+  }
+  .narrative-title {
+    font-family: var(--display); font-size: 2rem; font-weight: 300;
+    line-height: 1.1; margin-bottom: 18px;
+  }
+  .narrative-desc {
+    font-size: 0.95rem; color: var(--silver); line-height: 1.8;
+    margin-bottom: 20px;
+  }
+  .narrative-meta {
+    font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--grey-4);
+  }
+
+  /* ─── SKETCHBOOKS ────────────────────────────────────── */
+  .sketch-item .item-overlay { background: linear-gradient(to top, rgba(0,0,0,0.82) 0%, transparent 60%); }
+  .sketch-meta-tag {
+    font-size: 0.58rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--grey-4); display: block; margin-top: 2px;
+  }
+
+  /* ─── PROCESS STRIP ──────────────────────────────────── */
+  .process-strip {
+    background: var(--grey-1);
+    padding: 0; margin: 0; max-width: 100%;
+    overflow: hidden;
+  }
+  .process-inner {
+    max-width: 1280px; margin: 0 auto;
+    padding: 80px 48px;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 0; border: 1px solid var(--border); border-left: none; border-right: none;
+  }
+  .process-step {
+    padding: 32px 32px; border-right: 1px solid var(--border);
+  }
+  .process-step:last-child { border-right: none; }
+  .process-glyph {
+    font-family: var(--display); font-size: 3rem; font-weight: 300;
+    color: var(--grey-3); line-height: 1; margin-bottom: 20px;
+  }
+  .process-name {
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .process-desc { font-size: 0.82rem; color: var(--grey-4); line-height: 1.7; }
+
+  /* ─── CONTACT ────────────────────────────────────────── */
+  .contact-wrap {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+  }
+  .contact-left .section-title { margin-bottom: 28px; }
+  .contact-intro { font-size: 1rem; color: var(--silver); line-height: 1.8; margin-bottom: 40px; }
+  .contact-email {
+    font-family: var(--display); font-size: 1.5rem; font-weight: 300;
+    border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 32px;
+    display: block; transition: border-color 0.3s;
+  }
+  .contact-email:hover { border-color: var(--silver); }
+  .socials { display: flex; gap: 20px; }
+  .social-link {
+    font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--grey-4); border: 1px solid var(--border); padding: 10px 16px;
+    transition: all 0.3s;
+  }
+  .social-link:hover { color: var(--white); border-color: var(--silver); }
+  .contact-form { display: flex; flex-direction: column; gap: 0; }
+  .form-field {
+    position: relative; border-bottom: 1px solid var(--border);
+    margin-bottom: 32px;
+    transition: border-color 0.3s;
+  }
+  .form-field:focus-within { border-color: var(--silver); }
+  .form-field label {
+    display: block; font-size: 0.6rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--grey-4); margin-bottom: 10px;
+  }
+  .form-field input,
+  .form-field textarea {
+    width: 100%; background: none; border: none; outline: none;
+    color: var(--white); font-family: var(--body); font-size: 0.95rem;
+    font-weight: 300; padding-bottom: 12px;
+    resize: none; caret-color: var(--silver);
+  }
+  .form-field textarea { min-height: 100px; }
+  .btn-submit {
+    margin-top: 12px; align-self: flex-start;
+    font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase;
+    padding: 16px 40px; border: 1px solid var(--white);
+    background: none; color: var(--white); cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+    font-family: var(--body);
+  }
+  .btn-submit:hover { background: var(--white); color: var(--black); }
+
+  /* ─── FOOTER ─────────────────────────────────────────── */
+  footer {
+    border-top: 1px solid var(--border); max-width: 100%;
+    padding: 40px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .footer-logo {
+    font-family: var(--display); font-size: 1.1rem; font-weight: 300;
+    letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .footer-copy { font-size: 0.6rem; letter-spacing: 0.12em; color: var(--grey-4); }
+
+  /* ─── LIGHTBOX ───────────────────────────────────────── */
+  .lightbox {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,0.96);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.4s;
+  }
+  .lightbox.open { opacity: 1; pointer-events: all; }
+  .lightbox img { max-width: 90vw; max-height: 88vh; object-fit: contain; filter: grayscale(100%); }
+  .lightbox-close {
+    position: absolute; top: 32px; right: 40px;
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--grey-4); cursor: pointer;
+    transition: color 0.3s;
+  }
+  .lightbox-close:hover { color: var(--white); }
+  .lightbox-caption {
+    position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--grey-4);
+  }
+
+  /* ─── MOBILE NAV DRAWER ──────────────────────────────── */
+  .mobile-menu {
+    position: fixed; inset: 0; z-index: 150;
+    background: var(--black);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 36px; transform: translateY(-100%);
+    transition: transform 0.5s var(--ease);
+  }
+  .mobile-menu.open { transform: none; }
+  .mobile-menu a {
+    font-family: var(--display); font-size: 2.2rem; font-weight: 300;
+    letter-spacing: 0.06em;
+  }
+  .mobile-close {
+    position: absolute; top: 32px; right: 40px;
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--grey-4);
+  }
+
+  /* ─── RESPONSIVE ─────────────────────────────────────── */
+  @media (max-width: 900px) {
+    nav { padding: 22px 28px; }
+    nav.scrolled { padding: 16px 28px; }
+    .nav-links { display: none; }
+    .nav-toggle { display: flex; }
+    section { padding: 80px 28px; }
+    #about-section { grid-template-columns: 1fr; gap: 48px; }
+    .masonry { columns: 2; }
+    .paintings-grid { grid-template-columns: 1fr; }
+    .painting-cell.tall { aspect-ratio: 4/3; grid-row: auto; }
+    .narrative-item { grid-template-columns: 1fr; gap: 28px; padding: 56px 0; }
+    .narrative-item.flip { direction: ltr; }
+    .film-item { grid-template-columns: 1fr auto; gap: 20px; }
+    .film-num, .film-thumb, .film-duration { display: none; }
+    .process-inner { grid-template-columns: repeat(2, 1fr); }
+    .process-step { border-right: none; border-bottom: 1px solid var(--border); }
+    .process-step:nth-child(odd) { border-right: 1px solid var(--border); }
+    .process-step:last-child { border-bottom: none; }
+    .contact-wrap { grid-template-columns: 1fr; gap: 52px; }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+  }
+  @media (max-width: 560px) {
+    .hero-name { font-size: clamp(3.2rem, 16vw, 5rem); }
+    .masonry { columns: 1; }
+    .about-stats { grid-template-columns: repeat(3,1fr); }
+    .film-item { padding: 24px 0; }
+    section { padding: 64px 20px; }
+    .process-inner { padding: 60px 20px; grid-template-columns: 1fr; }
+    .process-step { border-right: none; }
+    footer { padding: 32px 20px; }
+    nav { padding: 20px 20px; }
+    .mobile-close { right: 24px; }
+  }
+
+  /* ─── PAGE SECTIONS (full width wrappers) ─────────────── */
+  .page-section { max-width: 100%; }
+  .section-inner { max-width: 1280px; margin: 0 auto; padding: 120px 48px; }
+  @media (max-width: 900px) { .section-inner { padding: 80px 28px; } }
+  @media (max-width: 560px) { .section-inner { padding: 64px 20px; } }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#home" class="nav-logo">Yash</a>
+  <ul class="nav-links">
+    <li><a href="#becoming">Becoming</a></li>
+    <li><a href="#pencil-portraits">Pencil Portraits</a></li>
+    <li><a href="#abstract-paintings">Abstract Paintings</a></li>
+    <li><a href="#visual-narratives">Visual Narratives</a></li>
+    <li><a href="#photography">Photography</a></li>
+    <li><a href="#films">Films</a></li>
+    <li><a href="#sketchbooks">Sketchbooks</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" id="mobileClose">✕ Close</button>
+  <a href="#home" class="mobile-link">Home</a>
+  <a href="#becoming" class="mobile-link">Becoming</a>
+  <a href="#pencil-portraits" class="mobile-link">Pencil Portraits</a>
+  <a href="#abstract-paintings" class="mobile-link">Abstract Paintings</a>
+  <a href="#visual-narratives" class="mobile-link">Visual Narratives</a>
+  <a href="#photography" class="mobile-link">Photography</a>
+  <a href="#films" class="mobile-link">Films</a>
+  <a href="#sketchbooks" class="mobile-link">Sketchbooks</a>
+  <a href="#contact" class="mobile-link">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="home" style="padding:0; max-width:100%;">
+  <div class="hero-bg"></div>
+  <!-- Film frame edge -->
+  <div class="film-edge" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+  </div>
+  <div class="film-label">Frame 001 — Yash Portfolio</div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Artist &nbsp;·&nbsp; Photographer &nbsp;·&nbsp; Filmmaker</p>
+    <h1 class="hero-name">Yash<em>sees.</em></h1>
+    <p class="hero-tagline">Cinematography &nbsp;·&nbsp; Visual Art &nbsp;·&nbsp; Still Photography</p>
+  </div>
+  <div class="hero-scroll-hint">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- BECOMING (formerly About) -->
+<div class="page-section" id="becoming">
+<div class="section-inner">
+  <div id="about-section">
+    <div class="about-image-wrap reveal">
+      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80" alt="Yash portrait" loading="lazy">
+      <div class="about-image-label">New Delhi, India — 2024</div>
+    </div>
+    <div class="about-text reveal">
+      <p class="section-eyebrow">Becoming</p>
+      <h2 class="section-title">A lens shaped by<em>curiosity.</em></h2>
+      <p class="about-body">
+        I'm Yash — a visual artist and <strong>cinematography student</strong> drawn to the quiet 
+        tension between stillness and motion. My work moves across drawing, photography, painting, 
+        and narrative short films, each discipline informing the others.
+      </p>
+      <p class="about-body">
+        Trained in the tradition of <strong>cinematic composition</strong>, I approach every frame 
+        as a question: what does the light reveal when everything else is stripped away? My 
+        photography pursues the decisive moment; my paintings chase what the camera cannot hold; 
+        my films are the space between both.
+      </p>
+      <p class="about-body">
+        Currently based in India, I am applying to MFA and BFA programs at <strong>Yale, RISD, 
+        Pratt, Parsons</strong>, and international institutions, seeking to deepen my practice 
+        within a rigorous academic environment. This portfolio is not a finished statement — 
+        it is a record of becoming.
+      </p>
+      <div class="disciplines">
+        <span class="discipline-tag">Cinematography</span>
+        <span class="discipline-tag">Still Photography</span>
+        <span class="discipline-tag">Graphite</span>
+        <span class="discipline-tag">Oil Painting</span>
+        <span class="discipline-tag">Acrylic</span>
+        <span class="discipline-tag">Short Film</span>
+        <span class="discipline-tag">Documentary</span>
+      </div>
+      <div class="about-stats">
+        <div class="stat">
+          <span class="stat-num">6+</span>
+          <span class="stat-label">Years of Practice</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">40+</span>
+          <span class="stat-label">Works Created</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">8</span>
+          <span class="stat-label">Films Completed</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<hr class="divider">
+
+<!-- PENCIL PORTRAITS -->
+<div class="page-section" id="pencil-portraits">
+<div class="section-inner">
+  <div class="gallery-header reveal">
+    <div>
+      <p class="section-eyebrow">Pencil Portraits</p>
+      <h2 class="section-title">Likeness, built<em>line by line.</em></h2>
+    </div>
+    <a class="gallery-link" href="gallery-pencil-portraits.html">All graphite studies</a>
+  </div>
+  <div class="masonry" id="pencilGrid">
+    <!-- generated by JS below -->
+  </div>
+</div>
+</div>
+
+<hr class="divider">
+
+<!-- ABSTRACT PAINTINGS -->
+<div class="page-section" id="abstract-paintings">
+<div class="section-inner">
+  <div class="gallery-header reveal">
+    <div>
+      <p class="section-eyebrow">Abstract Paintings</p>
+      <h2 class="section-title">What the camera<em>cannot hold.</em></h2>
+    </div>
+    <a class="gallery-link" href="gallery-abstract-paintings.html">View full series</a>
+  </div>
+  <div class="paintings-grid reveal" id="paintGrid">
+    <!-- generated by JS -->
+  </div>
+</div>
+</div>
+
+<hr class="divider">
+
+<!-- VISUAL NARRATIVES -->
+<div class="page-section" id="visual-narratives">
+<div class="section-inner">
+  <div class="gallery-header reveal">
+    <div>
+      <p class="section-eyebrow">Visual Narratives</p>
+      <h2 class="section-title">Stories told<em>in sequence.</em></h2>
+    </div>
+    <a class="gallery-link" href="gallery-visual-narratives.html">All photo essays</a>
+  </div>
+  <div class="narrative-list" id="narrativeList">
+    <!-- generated by JS -->
+  </div>
+</div>
+</div>
+
+<hr class="divider">
+
+<!-- PHOTOGRAPHY -->
+<div class="page-section" id="photography">
+<div class="section-inner">
+  <div class="gallery-header reveal">
+    <div>
+      <p class="section-eyebrow">Photography</p>
+      <h2 class="section-title">What the eye<em>arrests.</em></h2>
+    </div>
+    <a class="gallery-link" href="gallery-photography.html" id="photoLinkLabel">All 34 photographs</a>
+  </div>
+  <div class="masonry" id="photoGrid">
+    <!-- generated by JS below -->
+  </div>
+</div>
+</div>
+
+<hr class="divider">
+
+<!-- PROCESS STRIP -->
+<div class="process-strip">
+  <div class="process-inner">
+    <div class="process-step reveal">
+      <div class="process-glyph">○</div>
+      <p class="process-name">Observation</p>
+      <p class="process-desc">Every work begins with sustained looking — standing still until the world reveals its own composition.</p>
+    </div>
+    <div class="process-step reveal">
+      <div class="process-glyph">◻</div>
+      <p class="process-name">Frame</p>
+      <p class="process-desc">Whether a viewfinder or a canvas edge, the frame is not a boundary but a decision about what matters.</p>
+    </div>
+    <div class="process-step reveal">
+      <div class="process-glyph">◑</div>
+      <p class="process-name">Light</p>
+      <p class="process-desc">Light is the medium before the medium. I chase the quality of light that turns a subject into a feeling.</p>
+    </div>
+    <div class="process-step reveal">
+      <div class="process-glyph">▪</div>
+      <p class="process-name">Residue</p>
+      <p class="process-desc">The work is finished when it leaves something behind — an emotion the viewer cannot immediately name.</p>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- FILMS -->
+<div class="page-section" id="films">
+<div class="section-inner">
+  <div class="gallery-header reveal">
+    <div>
+      <p class="section-eyebrow">Films</p>
+      <h2 class="section-title">The space<em>between frames.</em></h2>
+    </div>
+    <a class="gallery-link" href="gallery-films.html">Full filmography</a>
+  </div>
+  <div class="films-list reveal" id="filmsList">
+    <!-- generated by JS -->
+  </div>
+</div>
+</div>
+
+<hr class="divider">
+
+<!-- SKETCHBOOKS -->
+<div class="page-section" id="sketchbooks">
+<div class="section-inner">
+  <div class="gallery-header reveal">
+    <div>
+      <p class="section-eyebrow">Sketchbooks</p>
+      <h2 class="section-title">Thinking,<em>left visible.</em></h2>
+    </div>
+    <a class="gallery-link" href="gallery-sketchbooks.html">Browse spreads</a>
+  </div>
+  <div class="masonry" id="sketchGrid">
+    <!-- generated by JS -->
+  </div>
+</div>
+</div>
+
+<hr class="divider">
+
+<!-- CONTACT -->
+<div class="page-section" id="contact">
+<div class="section-inner">
+  <div class="contact-wrap">
+    <div class="contact-left reveal">
+      <p class="section-eyebrow">Contact</p>
+      <h2 class="section-title">Let's make<em>something real.</em></h2>
+      <p class="contact-intro">
+        Whether you're a curator, admissions officer, fellow artist, or collaborator — 
+        I welcome conversation. My work is available for exhibition and I'm open to commissions.
+      </p>
+      <a href="mailto:yash@studio.com" class="contact-email">yash@studio.com</a>
+      <div class="socials">
+        <a href="#" class="social-link">Instagram</a>
+        <a href="#" class="social-link">Vimeo</a>
+        <a href="#" class="social-link">LinkedIn</a>
+        <a href="#" class="social-link">Behance</a>
+      </div>
+    </div>
+    <div class="contact-form reveal">
+      <div class="form-field">
+        <label for="f-name">Name</label>
+        <input type="text" id="f-name" placeholder="Your name" autocomplete="off">
+      </div>
+      <div class="form-field">
+        <label for="f-email">Email</label>
+        <input type="email" id="f-email" placeholder="your@email.com" autocomplete="off">
+      </div>
+      <div class="form-field">
+        <label for="f-subject">Subject</label>
+        <input type="text" id="f-subject" placeholder="Exhibition / Collaboration / Admissions inquiry" autocomplete="off">
+      </div>
+      <div class="form-field">
+        <label for="f-msg">Message</label>
+        <textarea id="f-msg" placeholder="Tell me about your project or inquiry…"></textarea>
+      </div>
+      <button class="btn-submit" id="formSubmit">Send Message →</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">Yash</span>
+  <span class="footer-copy">© 2024 Yash. All rights reserved. &nbsp;·&nbsp; Portfolio for MFA/BFA Applications</span>
+  <span class="footer-copy" style="color:var(--grey-3);">Made with intention.</span>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose">✕ Close</button>
+  <img src="" alt="" id="lightboxImg">
+  <div class="lightbox-caption" id="lightboxCaption"></div>
+</div>
+
+<script>
+/* ── DATA ───────────────────────────────────────────────── */
+const photos = [
+  { src:'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=700&q=80', title:'Circuitry', loc:'Mumbai, 2024' },
+  { src:'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80', title:'Altitude', loc:'Himalayas, 2023' },
+  { src:'https://images.unsplash.com/photo-1493246507139-91e8fad9978e?w=700&q=80', title:'Geometry of Fog', loc:'Kerala, 2024' },
+  { src:'https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=600&q=80', title:'Golden Hour', loc:'Rajasthan, 2023' },
+  { src:'https://images.unsplash.com/photo-1541698444083-023c97d3f4b6?w=700&q=80', title:'Solitude I', loc:'Varanasi, 2024' },
+  { src:'https://images.unsplash.com/photo-1455849318743-b2233052fcff?w=600&q=80', title:'Morning Pulse', loc:'Delhi, 2022' },
+  { src:'https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=700&q=80', title:'Sand Study', loc:'Jaisalmer, 2023' },
+  { src:'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=600&q=80', title:'Aerial', loc:'Goa, 2024' },
+  { src:'https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?w=700&q=80', title:'Forest Light', loc:'Coorg, 2023' },
+  { src:'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?w=700&q=80', title:'Night Market', loc:'Bangkok, 2023' },
+  { src:'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=600&q=80', title:'Lattice', loc:'Jaipur, 2024' },
+  { src:'https://images.unsplash.com/photo-1473773508845-188df298d2d1?w=700&q=80', title:'Threshold Light', loc:'Udaipur, 2023' },
+  { src:'https://images.unsplash.com/photo-1500534623283-312aade485b7?w=600&q=80', title:'Glass Study', loc:'Mumbai, 2022' },
+  { src:'https://images.unsplash.com/photo-1465101162946-4377e57745c3?w=700&q=80', title:'Quiet Harbor', loc:'Kochi, 2024' },
+  { src:'https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=600&q=80', title:'Pause', loc:'Shimla, 2023' },
+  { src:'https://images.unsplash.com/photo-1502790671504-542ad42d5189?w=700&q=80', title:'Stillwater', loc:'Srinagar, 2024' },
+  { src:'https://images.unsplash.com/photo-1495805442109-bf1cf975750b?w=600&q=80', title:'Procession', loc:'Pushkar, 2023' },
+  { src:'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=700&q=80', title:'Open Field', loc:'Manali, 2022' },
+];
+
+const paintings = [
+  { src:'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=800&q=80', title:'Dusk Study', year:'Oil on canvas, 2024', tall:true },
+  { src:'https://images.unsplash.com/photo-1578321272176-b7bbc0679853?w=800&q=80', title:'Fragment I', year:'Acrylic, 2023', tall:false },
+  { src:'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800&q=80', title:'Interior', year:'Oil on board, 2024', tall:false },
+  { src:'https://images.unsplash.com/photo-1547891654-e66ed7ebb968?w=800&q=80', title:'Cascade', year:'Mixed media, 2023', tall:false },
+  { src:'https://images.unsplash.com/photo-1536924940846-227afb31e2a5?w=800&q=80', title:'Fragment II', year:'Acrylic, 2024', tall:false },
+  { src:'https://images.unsplash.com/photo-1549887534-1541e9326642?w=800&q=80', title:'Weight of Color', year:'Oil on canvas, 2023', tall:true },
+  { src:'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=800&q=80', title:'Static', year:'Mixed media, 2024', tall:false },
+  { src:'https://images.unsplash.com/photo-1577720580479-7d839d829c73?w=800&q=80', title:'Erosion', year:'Oil on board, 2022', tall:false },
+];
+
+const films = [
+  { num:'01', thumb:'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400&q=80', title:'The Salt Flat', genre:'Short narrative · 16 min', year:'2024', duration:'16:22' },
+  { num:'02', thumb:'https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=400&q=80', title:'Beneath the Noise', genre:'Documentary · 22 min', year:'2023', duration:'22:07' },
+  { num:'03', thumb:'https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=400&q=80', title:'Corridor', genre:'Experimental · 8 min', year:'2024', duration:'08:45' },
+  { num:'04', thumb:'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400&q=80', title:'Of Mothers and Mountains', genre:'Documentary · 34 min', year:'2022', duration:'34:18' },
+  { num:'05', thumb:'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400&q=80', title:'Still Life, Moving', genre:'Experimental · 6 min', year:'2023', duration:'06:14' },
+  { num:'06', thumb:'https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=400&q=80', title:'Harbor Light', genre:'Short narrative · 12 min', year:'2022', duration:'12:51' },
+];
+
+const pencilPortraits = [
+  { src:'https://images.unsplash.com/photo-1531913764164-f85c52e6e654?w=700&q=80', title:'Study of My Grandfather', loc:'Graphite, 2024' },
+  { src:'https://images.unsplash.com/photo-1577083552431-6e5fd01988a5?w=600&q=80', title:'Unnamed Sitter I', loc:'Graphite, 2023' },
+  { src:'https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?w=700&q=80', title:'Self-Portrait, Tired', loc:'Charcoal, 2024' },
+  { src:'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&q=80', title:'Market Vendor, Profile', loc:'Graphite, 2023' },
+  { src:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=700&q=80', title:'Unnamed Sitter II', loc:'Graphite, 2024' },
+  { src:'https://images.unsplash.com/photo-1552058544-f2b08422138a?w=600&q=80', title:'Study in Half-Light', loc:'Charcoal, 2022' },
+  { src:'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=700&q=80', title:'Three-Quarter Study', loc:'Graphite, 2023' },
+  { src:'https://images.unsplash.com/photo-1521119989659-a83eee488004?w=600&q=80', title:'Unnamed Sitter III', loc:'Charcoal, 2024' },
+];
+
+const sketchbookSpreads = [
+  { src:'https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=700&q=80', title:'Travel Journal, Page 14', loc:'Ink & pencil, 2023' },
+  { src:'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=600&q=80', title:'Hand Studies', loc:'Pencil, 2024' },
+  { src:'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=700&q=80', title:'Set Design Notes', loc:'Ink, 2024' },
+  { src:'https://images.unsplash.com/photo-1517842645767-c639042777db?w=600&q=80', title:'Margins from Varanasi', loc:'Pencil & wash, 2023' },
+  { src:'https://images.unsplash.com/photo-1456086272160-b28b0645b729?w=700&q=80', title:'Costume Sketches', loc:'Pencil, 2024' },
+  { src:'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=600&q=80', title:'Storyboard Fragment', loc:'Ink, 2022' },
+  { src:'https://images.unsplash.com/photo-1455849318743-b2233052fcff?w=700&q=80', title:'Light Studies', loc:'Pencil, 2023' },
+  { src:'https://images.unsplash.com/photo-1496769336843-ae79c64e4ff8?w=600&q=80', title:'Field Notes', loc:'Ink & pencil, 2024' },
+];
+
+const narratives = [
+  {
+    title: 'Of Mothers and Salt',
+    desc: 'A six-frame study following salt-pan workers through a single dawn — the body as the unit of measure against an unyielding landscape.',
+    count: 'Series 01 · 6 frames',
+    meta: 'Rajasthan, 2024',
+    imgs: [
+      'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=700&q=80',
+      'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=500&q=80',
+      'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?w=500&q=80',
+    ]
+  },
+  {
+    title: 'The Last Tram',
+    desc: 'A nocturnal narrative tracing one tram line through a sleeping city — strangers, transit, and the particular loneliness of public light.',
+    count: 'Series 02 · 5 frames',
+    meta: 'Kolkata, 2023',
+    imgs: [
+      'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=700&q=80',
+      'https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=500&q=80',
+      'https://images.unsplash.com/photo-1496318447583-f524534e9ce1?w=500&q=80',
+    ]
+  },
+  {
+    title: 'Threshold',
+    desc: 'A quiet sequence shot at the doorways of a single street, exploring the moment a body crosses from public into private.',
+    count: 'Series 03 · 4 frames',
+    meta: 'Old Delhi, 2024',
+    imgs: [
+      'https://images.unsplash.com/photo-1517322048670-4fba75cbbb62?w=700&q=80',
+      'https://images.unsplash.com/photo-1532274402911-5a369e4c4bb5?w=500&q=80',
+      'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=500&q=80',
+    ]
+  },
+  {
+    title: 'Harvest, Interrupted',
+    desc: 'A sequence shot over one unseasonable week in a farming village, where weather and labor renegotiate the same field daily.',
+    count: 'Series 04 · 5 frames',
+    meta: 'Punjab, 2023',
+    imgs: [
+      'https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=700&q=80',
+      'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=500&q=80',
+      'https://images.unsplash.com/photo-1492496913980-501348b61469?w=500&q=80',
+    ]
+  },
+];
+
+/* ── HOMEPAGE TEASER GRIDS ───────────────────────────────── */
+// Each section below shows a short teaser. The "view all / full series"
+// links next to each heading open a dedicated gallery page (in a new tab)
+// where the complete set lives — see gallery-*.html.
+
+/* ── BUILD PHOTO MASONRY (teaser) ───────────────────────── */
+const grid = document.getElementById('photoGrid');
+const photoInitial = 9;
+photos.slice(0, photoInitial).forEach(p => {
+  const item = document.createElement('div');
+  item.className = 'masonry-item';
+  item.innerHTML = `
+    <img src="${p.src}" alt="${p.title}" loading="lazy">
+    <div class="item-overlay">
+      <div class="item-meta">${p.title} &nbsp;·&nbsp; ${p.loc}</div>
+    </div>`;
+  item.addEventListener('click', () => openLightbox(p.src, `${p.title} — ${p.loc}`));
+  grid.appendChild(item);
+});
+const photoLinkLabel = document.getElementById('photoLinkLabel');
+if (photoLinkLabel) photoLinkLabel.textContent = `All ${photos.length} photographs`;
+
+/* ── BUILD PENCIL PORTRAITS MASONRY (teaser) ────────────── */
+const pencilGrid = document.getElementById('pencilGrid');
+const pencilInitial = 4;
+pencilPortraits.slice(0, pencilInitial).forEach(p => {
+  const item = document.createElement('div');
+  item.className = 'masonry-item';
+  item.innerHTML = `
+    <img src="${p.src}" alt="${p.title}" loading="lazy">
+    <div class="item-overlay">
+      <div class="item-meta">${p.title} &nbsp;·&nbsp; ${p.loc}</div>
+    </div>`;
+  item.addEventListener('click', () => openLightbox(p.src, `${p.title} — ${p.loc}`));
+  pencilGrid.appendChild(item);
+});
+
+/* ── BUILD SKETCHBOOKS MASONRY (teaser) ─────────────────── */
+const sketchGrid = document.getElementById('sketchGrid');
+const sketchInitial = 4;
+sketchbookSpreads.slice(0, sketchInitial).forEach(p => {
+  const item = document.createElement('div');
+  item.className = 'masonry-item sketch-item';
+  item.innerHTML = `
+    <img src="${p.src}" alt="${p.title}" loading="lazy">
+    <div class="item-overlay">
+      <div class="item-meta">${p.title}<span class="sketch-meta-tag">${p.loc}</span></div>
+    </div>`;
+  item.addEventListener('click', () => openLightbox(p.src, `${p.title} — ${p.loc}`));
+  sketchGrid.appendChild(item);
+});
+
+/* ── BUILD VISUAL NARRATIVES (teaser) ───────────────────── */
+const narrativeList = document.getElementById('narrativeList');
+const narrativeInitial = 2;
+narratives.slice(0, narrativeInitial).forEach((n, i) => {
+  const item = document.createElement('div');
+  item.className = 'narrative-item reveal' + (i % 2 === 1 ? ' flip' : '');
+  const framesHtml = n.imgs.map(src => `<img src="${src}" alt="${n.title}" loading="lazy">`).join('');
+  item.innerHTML = `
+    <div class="narrative-frames">${framesHtml}</div>
+    <div class="narrative-text">
+      <div class="narrative-count">${n.count}</div>
+      <h3 class="narrative-title">${n.title}</h3>
+      <p class="narrative-desc">${n.desc}</p>
+      <div class="narrative-meta">${n.meta}</div>
+    </div>`;
+  item.querySelectorAll('.narrative-frames img').forEach(imgEl => {
+    imgEl.addEventListener('click', () => openLightbox(imgEl.src, `${n.title} — ${n.meta}`));
+  });
+  narrativeList.appendChild(item);
+});
+
+/* ── BUILD PAINTINGS GRID (teaser) ──────────────────────── */
+const pg = document.getElementById('paintGrid');
+const paintingInitial = 4;
+paintings.slice(0, paintingInitial).forEach(p => {
+  const cell = document.createElement('div');
+  cell.className = 'painting-cell' + (p.tall ? ' tall' : '');
+  cell.innerHTML = `
+    <img src="${p.src}" alt="${p.title}" loading="lazy">
+    <div class="painting-info">
+      <div class="painting-title">${p.title}</div>
+      <div class="painting-year">${p.year}</div>
+    </div>`;
+  cell.addEventListener('click', () => openLightbox(p.src, `${p.title} — ${p.year}`));
+  pg.appendChild(cell);
+});
+
+/* ── BUILD FILMS LIST (teaser) ──────────────────────────── */
+const fl = document.getElementById('filmsList');
+const filmInitial = 4;
+films.slice(0, filmInitial).forEach(f => {
+  const item = document.createElement('div');
+  item.className = 'film-item reveal';
+  item.innerHTML = `
+    <div class="film-num">${f.num}</div>
+    <div class="film-thumb"><img src="${f.thumb}" alt="${f.title}" loading="lazy"></div>
+    <div class="film-info">
+      <div class="film-title">${f.title}</div>
+      <div class="film-detail">${f.genre} &nbsp;·&nbsp; ${f.year}</div>
+    </div>
+    <div class="film-duration">${f.duration}</div>
+    <div class="film-play">
+      <svg width="12" height="14" viewBox="0 0 12 14"><path d="M0 0l12 7L0 14V0z"/></svg>
+    </div>`;
+  fl.appendChild(item);
+});
+
+/* ── LIGHTBOX ───────────────────────────────────────────── */
+const lb = document.getElementById('lightbox');
+const lbImg = document.getElementById('lightboxImg');
+const lbCap = document.getElementById('lightboxCaption');
+function openLightbox(src, caption) {
+  lbImg.src = src; lbCap.textContent = caption;
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+document.getElementById('lightboxClose').addEventListener('click', () => {
+  lb.classList.remove('open');
+  document.body.style.overflow = '';
+});
+lb.addEventListener('click', e => {
+  if (e.target === lb) { lb.classList.remove('open'); document.body.style.overflow = ''; }
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { lb.classList.remove('open'); document.body.style.overflow = ''; }
+});
+
+/* ── SCROLL EFFECTS ─────────────────────────────────────── */
+const nav = document.getElementById('nav');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 60) nav.classList.add('scrolled');
+  else nav.classList.remove('scrolled');
+}, { passive: true });
+
+/* ── MOBILE MENU ────────────────────────────────────────── */
+const toggle = document.getElementById('navToggle');
+const menu = document.getElementById('mobileMenu');
+const close = document.getElementById('mobileClose');
+toggle.addEventListener('click', () => { menu.classList.add('open'); document.body.style.overflow='hidden'; });
+close.addEventListener('click', () => { menu.classList.remove('open'); document.body.style.overflow=''; });
+document.querySelectorAll('.mobile-link').forEach(link => {
+  link.addEventListener('click', () => { menu.classList.remove('open'); document.body.style.overflow=''; });
+});
+
+/* ── FORM SUBMIT ────────────────────────────────────────── */
+document.getElementById('formSubmit').addEventListener('click', () => {
+  const name = document.getElementById('f-name').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  if (!name || !email) { alert('Please fill in your name and email.'); return; }
+  const btn = document.getElementById('formSubmit');
+  btn.textContent = 'Message Sent ✓';
+  btn.style.borderColor = 'var(--silver)';
+  btn.disabled = true;
+  setTimeout(() => { btn.textContent = 'Send Message →'; btn.style.borderColor=''; btn.disabled=false; }, 3500);
+});
+
+/* ── STAGGER REVEAL FOR FILMS ───────────────────────────── */
+setTimeout(() => {
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+}, 100);
+</script>
+</body>
+</html>
